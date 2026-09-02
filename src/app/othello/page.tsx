@@ -69,7 +69,7 @@ export default function OthelloPage() {
         for(let i = 0; i < data.boards.length; i++) {
             setBoard(data.boards[i])
             if(i != data.boards.length-1)
-            await sleep(3000)
+            await sleep(2000)
         }
         setIsProcessing(false)
         // setBoard(data.boards[0])
