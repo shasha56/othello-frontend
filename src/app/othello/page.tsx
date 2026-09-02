@@ -12,6 +12,10 @@ import {useState, useEffect} from "react";
 //      0, 0, 0, 0, 0, 0, 0, 0,
 // ]; // -1:黒,1:白
 
+// スリープ関数 (ミリ秒)
+const sleep = (ms: number) =>
+  new Promise(resolve => setTimeout(resolve, ms))
+
 // 盤面の取得
 async function getBoard() {
     const response = await fetch("http://127.0.0.1:8000/board",{
@@ -60,7 +64,11 @@ export default function OthelloPage() {
         const data = await response.json()
         console.log(data.boards)
 
-        setBoard(data.boards[0])
+        for(let i = 0; i < data.boards.length; i++) {
+            setBoard(data.boards[i])
+            await sleep(3000)
+        }
+        // setBoard(data.boards[0])
     }
 
     // 初期化
