@@ -68,10 +68,22 @@ export default function OthelloPage() {
 
         for(let i = 0; i < data.boards.length; i++) {
             setBoard(data.boards[i])
+            if(i != data.boards.length-1)
             await sleep(3000)
         }
         setIsProcessing(false)
         // setBoard(data.boards[0])
+    }
+
+    // リセット機能
+    const restart = async() => {
+        const response = await fetch("http://127.0.0.1:8000/reset",{
+            method: "POST",
+        })
+        const data = await response.json()
+        const initial_board = await getBoard()
+        setBoard(initial_board)
+        setIsProcessing(false)
     }
 
     // 初期化
@@ -87,6 +99,8 @@ export default function OthelloPage() {
     return (
         <div className="flex flex-col items-center">
             <h1 className="text-3xl font-bold m-4">オセロ</h1>
+            <button onClick={() => restart()}
+                        className={`border rounded flex items-center justify-center text-2xl font-bold shadow-sm bg-gray-400 mb-2`}>リスタート</button>
             <div className="grid grid-cols-8 gap-0.5 bg-black p-2 rounded-lg">
                 {board.map((cell, idx) => (
                     <button
@@ -102,6 +116,7 @@ export default function OthelloPage() {
     );
 }
 
+// 石
 function renderStone(cell:number) {
   if (cell == 1) {
     return <div className="w-12 h-12 rounded-full bg-white"></div>
