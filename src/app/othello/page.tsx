@@ -30,6 +30,7 @@ async function getBoard() {
 export default function OthelloPage() {
 
     const [board, setBoard] = useState<number[]>([]) // 盤面の管理
+    const [isProcessing, setIsProcessing] = useState<boolean>(false) // バックエンド処理中フラグ
 
     // クリックされたマスが合法手か確認
     const checkMove = async(idx:number) => {
@@ -44,14 +45,15 @@ export default function OthelloPage() {
         })
         const data = await response.json()
 
-        if (data.status) {
+        if (data.status && !isProcessing) {
             sendMove(idx)
         }
     }
     
     // クリックされたマスに石を置く
     const sendMove = async(idx:number) => {
-        console.log(idx)
+        // console.log(idx)
+        setIsProcessing(true)
         const response = await fetch("http://127.0.0.1:8000/move",{
             method: "POST",
             headers: {
@@ -68,6 +70,7 @@ export default function OthelloPage() {
             setBoard(data.boards[i])
             await sleep(3000)
         }
+        setIsProcessing(false)
         // setBoard(data.boards[0])
     }
 
