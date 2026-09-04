@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# オセロ Web フロントエンド
 
-## Getting Started
+Next.jsで実装したオセロAI対戦Webアプリのフロントエンド
 
-First, run the development server:
+## 概要
+
+ブラウザ上で8×8オセロをプレイできます。
+バックエンドAPIと通信し、ユーザーの着手・AIの着手・合法手・勝敗などを表示します。
+
+## 主な機能
+
+* 8×8オセロ盤面の表示
+* マスクリックによる着手
+* 合法手の表示
+* AI着手後の盤面更新
+* パス表示
+* 勝敗表示
+* 黒石・白石の枚数表示
+* ゲームのリスタート
+
+## 使用技術
+
+* Next.js
+* TypeScript
+* React
+* Tailwind CSS
+
+## セットアップ
+
+依存関係をインストールします。
+
+```bash
+npm install
+```
+
+開発サーバーを起動します。
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+ブラウザで以下を開きます。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```text
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## バックエンドAPI
 
-## Learn More
+このフロントエンドは、別途起動したFastAPIバックエンドと通信します。
 
-To learn more about Next.js, take a look at the following resources:
+開発環境では以下のURLを使用しています。
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```text
+http://127.0.0.1:8000
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 今後の予定
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+* UIの改善
+* ユーザーごとのゲーム状態管理
+* 戦績管理
+* ユーザーの先攻・後攻の切り替え
