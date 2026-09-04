@@ -39,18 +39,7 @@ export default function OthelloPage() {
 
     // クリックされたマスが合法手か確認
     const checkMove = async(idx:number) => {
-        const response = await fetch("http://127.0.0.1:8000/check",{
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                action: idx,
-            }),
-        })
-        const data = await response.json()
-
-        if (data.status && !isProcessing) {
+        if (state.actions.includes(idx) && !isProcessing) {
             sendMove(idx)
         }
     }
