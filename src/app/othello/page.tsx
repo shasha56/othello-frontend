@@ -16,7 +16,9 @@ type GameState = {
     status: string,
     board: number[],
     actions: number[],
-    turn: number
+    turn: number,
+    black_stones: number,
+    white_stones: number
 }
 
 // スリープ関数 (ミリ秒)
@@ -30,12 +32,12 @@ async function getBoard() {
     })
     const data = await response.json()
 
-    return [data.board, data.next_actions, data.turns]
+    return [data.board, data.next_actions, data.turns, data.stone_count[0][0], data.stone_count[0][1]]
 }
 
 export default function OthelloPage() {
 
-    const [state, setState] = useState<GameState>({status: "", board: [], actions: [], turn: -1}) // 盤面の管理
+    const [state, setState] = useState<GameState>({status: "", board: [], actions: [], turn: -1, black_stones: 2, white_stones: 2}) // 盤面の管理
     const [isProcessing, setIsProcessing] = useState<boolean>(false) // バックエンド処理中フラグ
 
     // クリックされたマスが合法手か確認
@@ -62,7 +64,7 @@ export default function OthelloPage() {
         // console.log(data.boards)
 
         for(let i = 0; i < data.boards.length; i++) {
-            setState({status: data.status, board: data.boards[i], actions: data.next_actions[i], turn: data.turns[i]})
+            setState({status: data.status, board: data.boards[i], actions: data.next_actions[i], turn: data.turns[i], black_stones: data.stone_count[i][0], white_stones: data.stone_count[i][1]})
             if(i != data.boards.length-1) await sleep(2000)
         }
         setIsProcessing(false)
@@ -75,16 +77,16 @@ export default function OthelloPage() {
             method: "POST",
         })
         await response.json()
-        const [initial_board, next_actions, turns] = await getBoard()
-        setState({status: "next", board: initial_board, actions: next_actions, turn: turns})
+        const [initial_board, next_actions, turns, black_stones, white_stones] = await getBoard()
+        setState({status: "next", board: initial_board, actions: next_actions, turn: turns, black_stones: black_stones, white_stones: white_stones})
         setIsProcessing(false)
     }
 
     // 初期化
     useEffect(() => {
         async function loadBoard() {
-            const [initial_board, next_actions, turns] = await getBoard()
-            setState({status: "next", board: initial_board, actions: next_actions, turn: turns})
+            const [initial_board, next_actions, turns, black_stones, white_stones] = await getBoard()
+            setState({status: "next", board: initial_board, actions: next_actions, turn: turns, black_stones: black_stones, white_stones: white_stones})
         }
         loadBoard()
     }, [])
@@ -134,6 +136,7 @@ export default function OthelloPage() {
                     </button>
                 ))}
             </div>
+            <div className="text-3xl font-bold m-4">{`黒: ${state.black_stones} 白: ${state.white_stones}`}</div>
         </div>
     );
 }
