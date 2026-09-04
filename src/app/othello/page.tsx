@@ -14,7 +14,8 @@ import {useState, useEffect} from "react";
 
 type GameState = {
     board: number[],
-    actions: number[]
+    actions: number[],
+    turn: number
 }
 
 // スリープ関数 (ミリ秒)
@@ -33,7 +34,7 @@ async function getBoard() {
 
 export default function OthelloPage() {
 
-    const [state, setState] = useState<GameState>({board: [], actions: []}) // 盤面の管理
+    const [state, setState] = useState<GameState>({board: [], actions: [], turn: -1}) // 盤面の管理
     const [isProcessing, setIsProcessing] = useState<boolean>(false) // バックエンド処理中フラグ
 
     // クリックされたマスが合法手か確認
@@ -71,7 +72,7 @@ export default function OthelloPage() {
         // console.log(data.boards)
 
         for(let i = 0; i < data.boards.length; i++) {
-            setState({board: data.boards[i], actions: data.next_actions[i]})
+            setState({board: data.boards[i], actions: data.next_actions[i], turn: data.turns[i]})
             if(i != data.boards.length-1) await sleep(2000)
         }
         setIsProcessing(false)
@@ -83,17 +84,17 @@ export default function OthelloPage() {
         const response = await fetch("http://127.0.0.1:8000/reset",{
             method: "POST",
         })
-        const data = await response.json()
-        const [initial_board, next_actions] = await getBoard()
-        setState({board: initial_board, actions: next_actions})
+        await response.json()
+        const [initial_board, next_actions, turns] = await getBoard()
+        setState({board: initial_board, actions: next_actions, turn: turns})
         setIsProcessing(false)
     }
 
     // 初期化
     useEffect(() => {
         async function loadBoard() {
-            const [initial_board, next_actions] = await getBoard()
-            setState({board: initial_board, actions: next_actions})
+            const [initial_board, next_actions, turns] = await getBoard()
+            setState({board: initial_board, actions: next_actions, turn: turns})
         }
         loadBoard()
     }, [])
@@ -110,7 +111,7 @@ export default function OthelloPage() {
                         onClick={() => checkMove(idx)}
                         className={`w-20 h-20 bg-green-600 border rounded flex items-center justify-center text-8xl font-bold shadow-sm transition-colors`}
                     >
-                    {renderStoneAndCandidate(cell, idx, state.actions)}
+                    {renderStoneAndCandidate(cell, idx, state.actions, state.turn)}
                     </button>
                 ))}
             </div>
