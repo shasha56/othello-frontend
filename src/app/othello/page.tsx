@@ -120,23 +120,23 @@ export default function OthelloPage() {
     }
 
     return (
-        <div className="flex flex-col items-center m-5">
-            <h1 className="text-6xl font-bold m-4">オセロ</h1>
+        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 px-4 py-8">
+            <h1 className="text-5xl font-bold mb-6">オセロ</h1>
             <button onClick={() => restart()}
-                        className={`border rounded flex items-center justify-center text-2xl font-bold shadow-sm bg-gray-400 mb-2`}>リスタート</button>
-            <div className="text-3xl font-bold m-4">{message(state.status, state.turn)}</div>
-            <div className="grid grid-cols-8 gap-0.5 bg-black p-2 rounded-lg">
+                        className="px-5 py-2 mb-4 rounded-lg bg-gray-700 text-white text-lg font-bold shadow hover:bg-gray-600 transition">リスタート</button>
+            <div className="text-2xl font-bold mb-4">{message(state.status, state.turn)}</div>
+            <div className="grid grid-cols-8 gap-1 bg-gray-900 p-2 rounded-xl shadow-lg">
                 {state.board.map((cell, idx) => (
                     <button
                         key={idx}
                         onClick={() => checkMove(idx)}
-                        className={`w-20 h-20 bg-green-600 border rounded flex items-center justify-center text-8xl font-bold shadow-sm transition-colors`}
+                        className="w-16 h-16 bg-green-600 border border-green-800 flex items-center justify-center transition hover:bg-green-500"
                     >
                     {renderStoneAndCandidate(cell, idx, state.actions, state.turn)}
                     </button>
                 ))}
             </div>
-            <div className="text-3xl font-bold m-4">{`黒: ${state.black_stones} 白: ${state.white_stones}`}</div>
+            <div className="mt-5 text-2xl font-bold">{`黒: ${state.black_stones} 白: ${state.white_stones}`}</div>
         </div>
     );
 }
