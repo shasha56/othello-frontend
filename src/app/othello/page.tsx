@@ -1,16 +1,7 @@
 "use client";
 import {useState, useEffect} from "react";
 
-// const test_board:number[] = [
-//     0, 0, 0, 0, 0, 0, 0, 0,
-//      0, 0, 0, 0, 0, 0, 0, 0,
-//      0, 0, 0, 0, 0, 0, 0, 0,
-//      0, 0, 0, 1, -1, 0, 0, 0,
-//      0, 0, 0, -1, 1, 0, 0, 0,
-//      0, 0, 0, 0, 0, 0, 0, 0,
-//      0, 0, 0, 0, 0, 0, 0, 0,
-//      0, 0, 0, 0, 0, 0, 0, 0,
-// ]; // -1:黒,1:白
+const API_URL = process.env.NEXT_PUBLIC_API_URL
 
 type GameState = {
     status: string,
@@ -27,7 +18,7 @@ const sleep = (ms: number) =>
 
 // 盤面の取得
 async function getBoard() {
-    const response = await fetch("http://127.0.0.1:8000/board",{
+    const response = await fetch(`${API_URL}/board`,{
         method: "GET",
     })
     const data = await response.json()
@@ -51,7 +42,7 @@ export default function OthelloPage() {
     const sendMove = async(idx:number) => {
         // console.log(idx)
         setIsProcessing(true)
-        const response = await fetch("http://127.0.0.1:8000/move",{
+        const response = await fetch(`${API_URL}/move`,{
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -73,7 +64,7 @@ export default function OthelloPage() {
 
     // リセット機能
     const restart = async() => {
-        const response = await fetch("http://127.0.0.1:8000/reset",{
+        const response = await fetch(`${API_URL}/reset`,{
             method: "POST",
         })
         await response.json()
